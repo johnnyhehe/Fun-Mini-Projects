@@ -1,1 +1,52 @@
-http://localhost:8839/lab/tree/Converting.ipynb
+from forex_python.converter import CurrencyRates
+import tkinter as tk
+from tkinter import ttk
+
+c = CurrencyRates()
+
+list_of_currencies = ["USD", "EUR", "GBP", "ILS", "DKK", "CAD", "IDR", "BGN",
+    "JPY", "HUF", "RON", "MYR", "SEK", "SGD", "HKD", "AUD", "CHF", "KRW", "CNY", "TRY", "HRK", "NZD", "THB", "LTL", "NOK", "RUB",
+    "INR", "MXN", "CZK", "BRL", "PLN", "PHP", "ZAR"]
+
+def convert_currency():
+    from_currency = from_currency_var.get()
+    to_currency = to_currency_var.get()
+    amount = amount_var.get()
+
+    exchange_rate = c.get_rate(from_currency, to_currency)
+    converted_amount = amount * exchange_rate
+
+    result_label.config(text=f"{amount} {from_currency} is equal to {converted_amount:.2f} {to_currency}")
+
+# Create the main window
+root = tk.Tk()
+root.title("Currency Converter")
+
+# Create input fields and labels
+from_currency_var = tk.StringVar()
+from_currency_label = ttk.Label(root, text="Convert from:")
+from_currency_combobox = ttk.Combobox(root, textvariable=from_currency_var, values=list_of_currencies)
+
+to_currency_var = tk.StringVar()
+to_currency_label = ttk.Label(root, text="Convert to:")
+to_currency_combobox = ttk.Combobox(root, textvariable=to_currency_var, values=list_of_currencies)
+
+amount_var = tk.DoubleVar()
+amount_label = ttk.Label(root, text="Amount:")
+amount_entry = ttk.Entry(root, textvariable=amount_var)
+
+convert_button = ttk.Button(root, text="Convert", command=convert_currency)
+result_label = ttk.Label(root, text="")
+
+# Layout the widgets
+from_currency_label.grid(row=0, column=0)
+from_currency_combobox.grid(row=0, column=1)
+to_currency_label.grid(row=1, column=0)
+to_currency_combobox.grid(row=1, column=1)
+amount_label.grid(row=2, column=0)
+amount_entry.grid(row=2, column=1)
+convert_button.grid(row=3, column=0, columnspan=2)
+result_label.grid(row=4, column=0, columnspan=2)
+
+# Start the application
+root.mainloop()
